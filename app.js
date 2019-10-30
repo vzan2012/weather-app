@@ -1,4 +1,5 @@
 const request = require("request");
+const geocode = require("./utils/geocode");
 
 // URL API
 const url =
@@ -6,30 +7,25 @@ const url =
 // "https://api.darksky.net/forecast/36c68e867439bbf93474df268266b674/13.0827,80.2707";
 
 // Request Method
-request({ url, json: true }, (error, response) => {
-  const data = response.body.currently;
-  const temperature = data.temperature;
-  const precipProbability = data.precipProbability;
+// request({ url, json: true }, (error, response) => {
+//   if (error) {
+//     console.log("Unable to connect the Weather Service");
+//   } else if (response.body.error) {
+//     console.log(response.body.error);
+//   } else {
+//     const data = response.body.currently;
+//     const temperature = data.temperature;
+//     const precipProbability = data.precipProbability;
 
-  const todayForecast = response.body.daily.data[0].summary;
+//     const todayForecast = response.body.daily.data[0].summary;
 
-  console.log(
-    `${todayForecast} It is currently ${temperature} degrees out. There is a ${precipProbability}% chance of rain`
-  );
-});
+//     console.log(
+//       `${todayForecast} It is currently ${temperature} degrees out. There is a ${precipProbability}% chance of rain`
+//     );
+//   }
+// });
 
-// Geocoding API
-// Address -> Long/Latit -> Weather
-
-const geocodeURL =
-  "https://api.mapbox.com/geocoding/v5/mapbox.places/Paris.json?access_token=pk.eyJ1IjoidnphbjIwMTIiLCJhIjoiY2syYzZsenF6M2E2MjNpbnI1YmcwN295MSJ9.zk1lI2r5M8AQ7ZZZs01peA&limit=1";
-
-request({ url: geocodeURL, json: true }, (error, response) => {
-  const place = response.body.query;
-  const coordinates = response.body.features[0];
-
-  console.log(`Place: ${place}`);
-  console.log(`Place Coordinates: ${coordinates.center}`);
-  console.log(`Latitude: ${coordinates.center[1]}`);
-  console.log(`Longitude: ${coordinates.center[0]}`);
+geocode("Paris", (error, data) => {
+  console.log(`Error: ${error}`);
+  console.log(`Data: ${JSON.stringify(data)}`);
 });
