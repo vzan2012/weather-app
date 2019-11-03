@@ -5,17 +5,17 @@ const forecast = (longitude, latitude, callback) => {
   const url = `https://api.darksky.net/forecast/36c68e867439bbf93474df268266b674/${longitude},${latitude}?units=si`;
 
   // Request Method
-  request({ url, json: true }, (error, response) => {
+  request({ url, json: true }, (error, { body }) => {
     if (error) {
       callback("Unable to connect the Weather Service", undefined);
-    } else if (response.body.error) {
-      callback(response.body.error, undefined);
+    } else if (body.error) {
+      callback(body.error, undefined);
     } else {
-      const data = response.body.currently;
+      const data = body.currently;
       const temperature = data.temperature;
       const precipProbability = data.precipProbability;
 
-      const todayForecast = response.body.daily.data[0].summary;
+      const todayForecast = body.daily.data[0].summary;
 
       callback(
         undefined,

@@ -5,22 +5,22 @@ const geocode = (address, callback) => {
     address
   )}.json?access_token=pk.eyJ1IjoidnphbjIwMTIiLCJhIjoiY2syYzZsenF6M2E2MjNpbnI1YmcwN295MSJ9.zk1lI2r5M8AQ7ZZZs01peA&limit=1`;
 
-  request({ url: url, json: true }, (error, response) => {
+  request({ url, json: true }, (error, { body }) => {
     if (error) {
       callback("Unable to connect the MapBox Service", undefined);
-    } else if (response.body.features.length === 0) {
+    } else if (body.features.length === 0) {
       callback(
         "Unable to find the location. Try for another search...",
         undefined
       );
     } else {
-      const place = response.body.query;
-      const coordinates = response.body.features[0];
+      const place = body.query;
+      const coordinates = body.features[0];
 
       callback(undefined, {
-        longitude: response.body.features[0].center[0],
-        latitude: response.body.features[0].center[1],
-        location: response.body.features[0].place_name
+        longitude: body.features[0].center[0],
+        latitude: body.features[0].center[1],
+        location: body.features[0].place_name
       });
     }
   });
